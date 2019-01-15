@@ -1,0 +1,47 @@
+{
+  "name": "e-voting",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "canvasjs": "^1.8.1",
+    "firebase": "^5.5.9",
+    "firebase-admin": "^6.3.0",
+    "fs": "0.0.1-security",
+    "material-ui": "^0.20.2",
+    "mdbreact": "^4.8.2",
+    "rc-date-picker": "0.0.1",
+    "react": "^16.5.2",
+    "react-bar-chart": "^0.1.2",
+    "react-detect-offline": "^2.1.2",
+    "react-dom": "^16.5.2",
+    "react-dropzone": "^7.0.1",
+    "react-firebase-file-uploader": "^2.4.2",
+    "react-id-generator": "^0.1.6",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "2.0.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.83.0",
+    "tachyons": "^4.11.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+}

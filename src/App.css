@@ -1,0 +1,187 @@
+h1 {
+  /* font-style:'BLACK'; */
+  text-align: center;
+  font-size: 35px;
+  font-weight: 100;
+  margin: 2rem 0;
+  letter-spacing: -1px;
+  color: white;
+  background: #373b44; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #4286f4,
+    #373b44
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #4286f4,
+    #373b44
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  padding: 40px;
+  margin-top: 0px;
+}
+h2 {
+  color: black;
+  text-align: center;
+}
+.form {
+  /* background: url("bg.jpg") no-repeat center center fixed; */
+  background-color: white;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  margin: 0 auto;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+}
+
+.form input {
+  /* font-family: sans-serif; */
+  background: none;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #055784;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 12px;
+  margin: 0 0 15px;
+}
+
+.form button {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  background: #065784;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.form button:hover {
+  background: #5b696e;
+}
+
+.form image {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  background: #065784;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.register {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.vot {
+  /* background: url("bg.jpg") no-repeat center center fixed; */
+  background-color: white;
+  margin: 0 auto;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+}
+
+.vot button {
+  font-family: sans-serif;
+  background: #065784;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button:hover {
+  background: #5b696e;
+}
+.photo-grid {
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.figure {
+  flex-basis: calc(33.333%);
+  border: 1px solid black;
+  padding: 2rem;
+  flex-grow: 1;
+  margin: 0 2rem 2rem 2rem;
+}
+.photo {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 0px;
+
+  /* margin:auto auto 0rem auto; */
+}
+
+.picture {
+  height: 100px;
+  width: 100px;
+}
+
+.all-picture {
+  width: 900px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.h2 {
+  color: white;
+}
+
+.grid {
+  width: 100%;
+}
+
+h3 {
+  /* font-style:'BLACK'; */
+  text-align: left;
+  font-size: 25px;
+  font-weight: 100;
+  margin: 2rem 0;
+  letter-spacing: -1px;
+  color: black;
+  background: #373b44; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #4286f4,
+    #373b44
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #4286f4,
+    #373b44
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  padding: 10px;
+  margin-top: 0px;
+}
+
+.header-three {
+  text-align: right;
+}
+
+.form-image {
+  width: 100px;
+  height: 100px;
+  margin-top: 10px;
+  margin-right: 95%;
+}
