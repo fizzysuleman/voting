@@ -11,7 +11,7 @@ import firebaseConf from './Firebase';
 import per from './6.jpg';
 
 export default class AccordionExampleStandard extends Component {
-  state = {activeIndex: '', contestantsPost: [], voteButtonClicked: false};
+  state = {activeIndex: '', contestantsPost: []};
 
   showAlert(type, message) {
         this.setState({
@@ -60,8 +60,6 @@ export default class AccordionExampleStandard extends Component {
         this.showAlert('danger', message);
       });
     this.setState({isLoading: false});
-    // this.resetForm();
-    this.setState({voteButtonClicked:true})
     
   };
 
