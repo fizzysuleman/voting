@@ -43,11 +43,11 @@ class TableExampleSelectableInvertedRow extends Component {
   handleCloseDisapprovedModal = () => {
     this.setState({openDisapprovedModal: false});
   };
-
-  changePost = (post, fullName, id,aspirantKey) => {
+  
+  changePost = (post,lastName,firstName, id,aspirantKey,section,reason,todo,imageUrl) => {
     this.props.history.push({
       pathname: '/change',
-      state: {post, fullName, id,aspirantKey},
+      state: {post,lastName, firstName, id,aspirantKey,section,reason,todo,imageUrl},
     });
   };
 
@@ -71,6 +71,7 @@ class TableExampleSelectableInvertedRow extends Component {
           });
 
           this.setState({postsData: postsData});
+          //trying to get the items in the in aspirants 
           let newData = postsData.filter(item => {
             return item.aspirants.length > 0;
           });
@@ -78,7 +79,7 @@ class TableExampleSelectableInvertedRow extends Component {
           let finalData = newData.map(item => {
             return item.aspirants;
           });
-
+          //joining all the arrays together
           let finalFinalData = finalData.reduce((a, b) => {
             return a.concat(b);
           }, []);
@@ -87,7 +88,7 @@ class TableExampleSelectableInvertedRow extends Component {
           console.log(this.state.aspirant);
         });
       };
-  ;
+  
 
   render() {
     const {postsData, isLoading, openDisapprovedModal, aspirant} = this.state;
@@ -99,6 +100,7 @@ class TableExampleSelectableInvertedRow extends Component {
               <Table.HeaderCell>Fullname</Table.HeaderCell>
               <Table.HeaderCell>Post</Table.HeaderCell>
               <Table.HeaderCell>Class(SS2)</Table.HeaderCell>
+              <Table.HeaderCell>School ID</Table.HeaderCell>
               <Table.HeaderCell>
                 Reason want to become a Prefect
               </Table.HeaderCell>
@@ -114,7 +116,7 @@ class TableExampleSelectableInvertedRow extends Component {
                 <Table.Cell>
                   <Header as="h4">
                     <Image
-                      src={item.imageUrl.downloadURL ? item.imageUrl.downloadURL : ''}
+                      src={item.imageUrl.downloadURL ? item.imageUrl : ''}
                       rounded
                       size="mini"
                     />
@@ -125,6 +127,7 @@ class TableExampleSelectableInvertedRow extends Component {
                 </Table.Cell>
                 <Table.Cell>{item.prefectName}</Table.Cell>
                 <Table.Cell>{item.section}</Table.Cell>
+                <Table.Cell>{item.schoolId}</Table.Cell>
                 <Table.Cell>{item.reason}</Table.Cell>
                 <Table.Cell>{item.todo}</Table.Cell>
                 <Table.Cell>
@@ -146,9 +149,14 @@ class TableExampleSelectableInvertedRow extends Component {
                     onClick={() =>
                       this.changePost(
                         item.prefectName,
-                        (item.lastName+' '+item.firstName),
+                        (item.lastName),
+                        (item.firstName),
                         item.prefectId,
-                        item.aspirantKey
+                        item.aspirantKey,
+                        item.section,
+                        item.reason,
+                        item.todo,
+                        item.imageUrl.downloadURL
                       )
                     }
                   >

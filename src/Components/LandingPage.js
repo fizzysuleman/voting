@@ -8,6 +8,7 @@ import {
   Container,
   Segment,
 } from 'semantic-ui-react';
+import Link from 'react-router-dom/Link';
 
 class LandingPage extends Component {
   handleAdmin = () => {
@@ -41,7 +42,7 @@ class LandingPage extends Component {
                   <Icon name="user circle" />
                   Admin access only
                 </Header>
-                <Button color="red" onClick={this.handleAdmin}>
+                <Button color="red" as={Link} to='/LoginAdmin'>
                   Admin
                 </Button>
               </Grid.Column>
@@ -51,7 +52,7 @@ class LandingPage extends Component {
                   <Icon name="registered" />
                   Register to contest
                 </Header>
-                <Button color="yellow" onClick={this.handleAspirants}>
+                <Button color="yellow" as={Link} to='/registerAspirants'>
                   Register Aspirants
                 </Button>
               </Grid.Column>
@@ -61,7 +62,7 @@ class LandingPage extends Component {
                   <Icon name="users" />
                   Register to Vote
                 </Header>
-                <Button color="blue" onClick={this.handleVoters}>
+                <Button color="blue" as={Link} to='/Register'>
                   Register Voters
                 </Button>
               </Grid.Column>
@@ -71,7 +72,7 @@ class LandingPage extends Component {
                   <Icon name="erase" />
                   Vote for candidate
                 </Header>
-                <Button color="green" onClick={this.handleVoting}>
+                <Button color="green" as={Link} to='/Login'>
                   Election
                 </Button>
               </Grid.Column>

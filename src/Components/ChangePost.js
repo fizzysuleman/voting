@@ -8,16 +8,29 @@ class ChangePost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: [],
+      options: [
+        {
+          key: '',
+        },
+      ],
       selectedOption: '',
-      post: props.location.state ? props.location.state.post : "",
-      fullName: props.location.state.fullName,
+      post: props.location.state ? props.location.state.post : '',
+      firstName: props.location.state.firstName,
+      lastName: props.location.state.lastName,
       id: props.location.state.id,
-      aspirantKey:props.location.state.aspirantKey,
+      aspirantKey: props.location.state.aspirantKey,
+      section: props.location.state.section,
+      reason: props.location.state.reason,
+      todo: props.location.state.todo,
+      imageUrl:{ downloadURL: props.location.state.imageUrl},
       isLoading: false,
+      fullName:
+        props.location.state.firstName + ' ' + props.location.state.lastName,
     };
+    console.log(props.location.state)
     //post: props.location.state ? props.location.state.post : ""
   }
+  
   showAlert(type, message) {
     this.setState({
       alert: true,
@@ -27,17 +40,45 @@ class ChangePost extends Component {
       this.setState({alert: false});
     }, 8000);
   }
-  updatePost = (postId,aKey) => {
+  updatePost = (postId, aspirantKey) => {
+    const {options} = this.state;
     this.setState({isLoading: true});
-    const {selectedOption} = this.state;
-    firebaseConf
+    let prefect = options.find(option => {
+      return option.key === this.state.selectedOption;
+    });
+    let prefectId = prefect.key;
+    console.log(prefectId);
+    const aspirantPush = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      prefectName: prefect.text,
+      prefectId: prefectId,
+      reason: this.state.reason,
+      section: this.state.section,
+      todo: this.state.todo,
+      imageUrl: this.state.imageUrl,
+      votes: [],
+    };
+    
+    /**
+     * similar to the Array.push method,
+     * this sends a copy of our object so
+     * that it can be stored in Firebase.
+     */
+
+    const itemsRef = firebaseConf
       .database()
-      .ref(`/posts/${postId}/aspirant/${aKey}`)
-      .update({
-        prefectName: selectedOption,
-      })
+      .ref(`posts/${prefectId}/aspirants`);
+
+    itemsRef
+      .push(aspirantPush)
 
       .then(() => {
+        firebaseConf
+          .database()
+          .ref(`/posts/${postId}/aspirants/${aspirantKey}`)
+          .remove();
+
         this.showAlert('success', 'You have successfully added a new post');
 
         this.setState({isLoading: false});
@@ -57,7 +98,8 @@ class ChangePost extends Component {
         snapshot.forEach(data => {
           const optionNew = {
             text: data.val().post,
-            value: data.val().post,
+            value: data.key,
+            key: data.key,
           };
           options.push(optionNew);
           this.setState({options: options});
@@ -66,7 +108,16 @@ class ChangePost extends Component {
   }
 
   render() {
-    const {options, post, fullName, id, selectedOption, isLoading,aspirantKey} = this.state;
+    const {
+      options,
+      post,
+      fullName,
+      id,
+      selectedOption,
+      isLoading,
+      aspirantKey,
+      key,
+    } = this.state;
     // console.log(options);
     return (
       <div>
@@ -103,14 +154,15 @@ class ChangePost extends Component {
           <Form.Field
             control={Button}
             loading={isLoading}
-            onClick={() => this.updatePost(id,aspirantKey)}
+            onClick={() => this.updatePost(id, aspirantKey)}
           >
             Change
           </Form.Field>
         </Form>
         <Offline>
           <marquee>
-            You are currently offline,Connect to the internet and continue the process
+            You are currently offline,Connect to the internet and continue the
+            process
           </marquee>
         </Offline>
       </div>

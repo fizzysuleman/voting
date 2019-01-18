@@ -8,6 +8,7 @@ import Applicants from './Applicants';
 import Voters from './Voters';
 import Result from './Result';
 import Logout from './Logout';
+import Id from './Id'
 
 const panes = [
   {menuItem: 'Add Posts', render: () => <AddPost />},
@@ -15,6 +16,7 @@ const panes = [
   {menuItem: 'Applicants', render: () => <Applicants />},
   {menuItem: 'Voters', render: () => <Voters />},
   {menuItem: 'Results', render: () => <Result />},
+  {menuItem: 'Add ID', render: () => <Id />},
   {menuItem: 'Logout', render: () => <Logout />},
 ];
 class TabExamplePointing extends Component {

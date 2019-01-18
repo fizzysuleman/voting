@@ -25,8 +25,19 @@ class FormExampleFieldControl extends Component {
       section: '',
       teacher: '',
       category: '',
+      schoolId: '',
+      votersData: [],
       isLoading: false,
     };
+  }
+  showAlert(type, message) {
+    this.setState({
+      alert: true,
+      alertData: {type, message},
+    });
+    setTimeout(() => {
+      this.setState({alert: false});
+    }, 8000);
   }
 
   handleChange = e => {
@@ -61,34 +72,95 @@ class FormExampleFieldControl extends Component {
       category: this.state.category,
       section: this.state.section,
       teacher: this.state.teacher,
+      schoolId: this.state.schoolId,
       id: uniqueID(),
     };
-    console.log(item);
 
     /**
      * similar to the Array.push method,
      * this sends a copy of our object so
      * that it can be stored in Firebase.
      */
-    itemsRef.push(item).then(() => {
-      this.setState({isLoading: false});
-      this.props.history.push({pathname: '/Successful'});
+    let filteredSchoolId = this.state.fetchedSchoolId.find(id => {
+      return this.state.schoolId === id.schoolId;
     });
 
-    /**
-     * here we clear out form values after
-     * everything is done
-     */
+    let usedSchoolId = this.state.votersData.find(id => {
+      return id===this.state.schoolId;
+    });
+    console.log(usedSchoolId);
+    if (!filteredSchoolId) {
+      this.showAlert(
+        'danger',
+        'The school Id you used was not registered by this school, Contact administrator for further explanations'
+      );
+      this.setState({isLoading: false});
+    } else if (usedSchoolId) {
+      this.showAlert(
+        'danger',
+        'The school Id you used has been used by another person to register to vote, Contact administrator if it was not you'
+      );
+      this.setState({isLoading: false});
+    } else {
+      itemsRef.push(item).then(() => {
+        this.setState({isLoading: false});
+        this.props.history.push({pathname: '/Successful'});
+      });
+    }
   };
+  componentWillMount() {
+    firebaseConf
+      .database()
+      .ref('schoolInfo')
+      .on('value', snapshot => {
+        const fetchedSchoolId = [];
+        snapshot.forEach(data => {
+          const fetchedSchoolIdNew = {
+            schoolId: data.key,
+          };
+          fetchedSchoolId.push(fetchedSchoolIdNew);
+          this.setState({fetchedSchoolId});
+        });
+      });
+    //fetching voters school id to be able to see if they have registered before
+    firebaseConf
+      .database()
+      .ref('voters')
+      .on('value', snapshot => {
+        const votersData = [];
+        snapshot.forEach(data => {
+          const votersDataNew = {
+            voterSchoolId: data.val().schoolId,
+          };
+          votersData.push(votersDataNew);
+          this.setState({votersData});
+        });
+      });
+  }
 
   render() {
-    const {fullName, category, teacher, section, isLoading} = this.state;
+    const {
+      fullName,
+      category,
+      teacher,
+      section,
+      isLoading,
+      schoolId,
+    } = this.state;
     return (
       <div>
         <h1>Register Voters</h1>
         <marquee>
           Note:Fill form in <strong>Capital Letters</strong>
         </marquee>
+        {this.state.alert && (
+          <div
+            className={`alert alert-${this.state.alertData.type}`}
+            role="alert"
+          >
+            <div className="container">{this.state.alertData.message}</div>
+          </div>
+        )}
         <Form onChange={this.handleChange}>
           <Form.Group widths="equal">
             <Form.Field
@@ -117,13 +189,22 @@ class FormExampleFieldControl extends Component {
               value={section}
             />
           </Form.Group>
-          <Form.Field
-            control={Input}
-            label="Class Teacher"
-            placeholder="Class Teacher(For only students)"
-            name="teacher"
-          />
-
+          <Form.Group widths="equal">
+            <Form.Field
+              control={Input}
+              label="Class Teacher"
+              placeholder="Class Teacher(For only students)"
+              name="teacher"
+              value={teacher}
+            />
+            <Form.Field
+              control={Input}
+              label="School ID"
+              placeholder="School ID"
+              name="schoolId"
+              value={schoolId}
+            />
+          </Form.Group>
           <br />
           <br />
           <br />
@@ -133,7 +214,7 @@ class FormExampleFieldControl extends Component {
             type="submit"
             color="blue"
             loading={isLoading}
-            disabled={!fullName || !category}
+            disabled={!fullName || !category || !schoolId}
             onClick={this.handleSubmit}
           >
             Submit

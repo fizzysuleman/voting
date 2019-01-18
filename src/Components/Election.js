@@ -6,22 +6,24 @@ import {
   Container,
   Button,
   Accordion,
+  Form,
 } from 'semantic-ui-react';
 import firebaseConf from './Firebase';
 import per from './6.jpg';
+import {withRouter} from 'react-router-dom'
 
-export default class AccordionExampleStandard extends Component {
+ class AccordionExampleStandard extends Component {
   state = {activeIndex: '', contestantsPost: []};
 
   showAlert(type, message) {
-        this.setState({
-          alert: true,
-          alertData: {type, message},
-        });
-        setTimeout(() => {
-          this.setState({alert: false});
-        }, 4000);
-      }
+    this.setState({
+      alert: true,
+      alertData: {type, message},
+    });
+    setTimeout(() => {
+      this.setState({alert: false});
+    }, 4000);
+  }
 
   handleClick = (e, titleProps) => {
     const {index} = titleProps;
@@ -30,40 +32,56 @@ export default class AccordionExampleStandard extends Component {
 
     this.setState({activeIndex: newIndex});
   };
+
+  handleFinish=()=>{
+    localStorage.removeItem('VOTERID')
+    this.props.history.push({
+      pathname:'/Login'
+    })
+  }
   componentDidMount() {
     this.fetchAspirantsdata();
+    let voterId = localStorage.getItem('VOTERID');
+    this.setState({voterId});
   }
-  handleUnvote=(prefectId,aspirantKey)=>()=>{
-    let voterId=localStorage.getItem('VOTERID');
-    
+
+  handleUnvote = (prefectId, aspirantKey) => () => {
+    const {voterId} = this.state;
+
     const removeRef = firebaseConf
       .database()
       .ref(`posts/${prefectId}/aspirants/${aspirantKey}/votes/${voterId}`);
-      removeRef.remove()
-    
-  }
+    removeRef.remove();
+  };
 
-  handleVote=(prefectId,aspirantKey )=>()=>{
-    let voterId=localStorage.getItem('VOTERID');
-    console.log(voterId)
+  handleVote = (prefectId, aspirantKey) => () => {
+    const {voterId} = this.state;
     const itemsRef = firebaseConf
       .database()
       .ref(`posts/${prefectId}/aspirants/${aspirantKey}/votes`);
 
     itemsRef
-      .child(voterId).set({voterId: voterId})
-      .then((snapshot) => {
-        // this.showAlert('success', 'You have successfully filled the form');
-      })
+      .child(voterId)
+      .set({voterId: voterId})
+      
+
+
+    //   const itemsRef2 = firebaseConf
+    //   .database()
+    //   .ref(`posts/${prefectId}/aspirants/voters`);
+
+    // itemsRef2
+    //   .child(voterId)
+    //   .set({voterId: voterId})
+   
+      .then(() => {})
+
       .catch(message => {
         console.log(`this is the error :${message}`);
         this.showAlert('danger', message);
       });
     this.setState({isLoading: false});
-    
   };
-
-  
 
   fetchAspirantsdata = () => {
     firebaseConf
@@ -87,8 +105,8 @@ export default class AccordionExampleStandard extends Component {
   };
 
   render() {
-    const {activeIndex, contestantsPost} = this.state;
-
+    const {activeIndex, contestantsPost, voterId} = this.state;
+    console.log(voterId);
     return (
       <div>
         <h1>Welcome and Vote wisely!!</h1>
@@ -123,8 +141,28 @@ export default class AccordionExampleStandard extends Component {
                           </Card.Content>
                           <Card.Content extra>
                             <center>
-                            {<Button color="green" onClick={this.handleVote(item.prefectId, item.aspirantKey)}>Vote</Button>}
-                              {<Button color="red" onClick={this.handleUnvote(item.prefectId, item.aspirantKey)}>Unvote</Button>}
+                              {!(item.votes && item.votes[voterId]) && (
+                                <Button
+                                  color="green"
+                                  onClick={this.handleVote(
+                                    item.prefectId,
+                                    item.aspirantKey
+                                  )}
+                                >
+                                  Vote
+                                </Button>
+                              )}
+                              {item.votes && item.votes[voterId] && (
+                                <Button
+                                  color="red"
+                                  onClick={this.handleUnvote(
+                                    item.prefectId,
+                                    item.aspirantKey
+                                  )}
+                                >
+                                  Unvote
+                                </Button>
+                              )}
                             </center>
                           </Card.Content>
                         </Card>
@@ -135,96 +173,15 @@ export default class AccordionExampleStandard extends Component {
               );
             })}
           </Accordion>
+          <br />
+          <Form.Field style={{paddingLeft:'auto',paddingRight:'auto'}} control={Button} type="submit" color="blue" onClick={this.handleFinish}>
+            Finish
+          </Form.Field>
         </Container>
       </div>
     );
   }
 }
 
-// import React, {Component} from 'react';
-// import {Card, Icon, Image, Container, Button} from 'semantic-ui-react';
-// import per from './6.jpg';
-// import firebaseConf from './Firebase';
-// class Election extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       contestantsPost: [],
-//       totalNumberOfPositions: '',
-//       currentIndex: '',
-//     };
-//   }
-//   componentDidMount() {
-//     this.fetchAspirantsdata();
-//   }
 
-//   fetchAspirantsdata = () => {
-//     firebaseConf
-//       .database()
-//       .ref('posts')
-//       .orderByChild('prefect')
-//       .on('value', snapshot => {
-//         const contestantsPost = [];
-//         snapshot.forEach(data => {
-//           contestantsPost.push({
-//             id: data.val().id,
-//             post: data.val().post,
-//             aspirants: Object.values(
-//               data.val().aspirants ? data.val().aspirants : ''
-//             ),
-//           });
-//           this.setState({contestantsPost});
-//           console.log(this.state.contestantsPost);
-//         });
-//       });
-//   };
-//   render() {
-//     const {contestantsPost} = this.state;
-//     console.log(contestantsPost[1]);
-
-//     return (
-//       <div>
-//         <h1>Welcome and Vote wisely!!</h1>
-//         {/* {contestantsPost.aspirants &&
-//           contestantsPost.aspirants.map(constestant => {
-//             return ( */}
-//         {contestantsPost && (
-//           <div>
-//             {contestantsPost.map((item, index) => (
-//               <Container>
-//                 <center>
-//                   <h2>{item.post}</h2>
-//                 </center>
-//                 <br />
-//                 <Card.Group centered>
-//                   {item.aspirants.map(item => (
-//                     <Card style={{width: '25%', height: 'e'}}>
-//                       <Image src={per} />
-//                       <Card.Content>
-//                         <Card.Header>
-//                           <center>
-//                             {item.firstName + ' ' + item.lastName}
-//                           </center>
-//                         </Card.Header>
-//                       </Card.Content>
-//                       <Card.Content extra>
-//                         <center>
-//                           <Button color="green">Vote</Button>
-//                         </center>
-//                       </Card.Content>
-//                     </Card>
-//                   ))}
-//                 </Card.Group>
-//               </Container>
-//             ))}
-//           </div>
-//         )}
-
-//         {/* );
-//           })} */}
-//       </div>
-//     );
-//   }
-// }
-
-// export default Election;
+export default withRouter(AccordionExampleStandard)
