@@ -16,6 +16,7 @@ class Login extends Component {
       isLoading: false,
       alert: false,
       alertData: {},
+      correctIdName:''
     };
   }
   showAlert(type, message) {
@@ -41,6 +42,7 @@ class Login extends Component {
           const fuidNew = {
             id: data.val().id,
             uid: data.key,
+            fullName:data.val().fullName
           };
           fuid.push(fuidNew);
           this.setState({fuid});
@@ -52,16 +54,23 @@ class Login extends Component {
     this.setState({isLoading: true});
     const {fuid} = this.state;
     event.preventDefault();
-
     let correctId = fuid.find(id => {
       return id.id === this.state.id;
     });
+    let correctPerson=fuid.find(person=>{
+      return this.state.id=== person.id
+    })
+    let correctIdName=correctPerson?correctPerson.fullName:''
+    this.setState({correctIdName})
     const finalId = correctId ? correctId.id : '';
-    console.log(this.state.id);
     if (finalId === this.state.id && this.state.id !== '') {
       localStorage.setItem('VOTERID', finalId);
       this.props.history.push({
         pathname: '/election',
+        state:{
+          correctIdName
+        }
+
       });
       this.setState({isLoading: false});
     } else {

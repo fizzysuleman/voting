@@ -25,8 +25,10 @@ class FormExampleFieldControl extends Component {
       section: '',
       teacher: '',
       category: '',
+      uniqueIdentity:'',
       schoolId: '',
       votersData: [],
+      fetchedSchoolId:[],
       isLoading: false,
     };
   }
@@ -51,6 +53,7 @@ class FormExampleFieldControl extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.setState({isLoading: true});
+    const{uniqueIdentity,fullName}=this.state
     /**
      * store all of everything thats being submitted,
      * We do this by calling the ref method and passing
@@ -75,7 +78,7 @@ class FormExampleFieldControl extends Component {
       schoolId: this.state.schoolId,
       id: uniqueID(),
     };
-
+this.setState({uniqueIdentity:item.id ,fullName:item.fullName})
     /**
      * similar to the Array.push method,
      * this sends a copy of our object so
@@ -86,9 +89,9 @@ class FormExampleFieldControl extends Component {
     });
 
     let usedSchoolId = this.state.votersData.find(id => {
-      return id===this.state.schoolId;
+      return this.state.schoolId === id.voterSchoolId;
     });
-    console.log(usedSchoolId);
+   
     if (!filteredSchoolId) {
       this.showAlert(
         'danger',
@@ -101,10 +104,19 @@ class FormExampleFieldControl extends Component {
         'The school Id you used has been used by another person to register to vote, Contact administrator if it was not you'
       );
       this.setState({isLoading: false});
+
     } else {
       itemsRef.push(item).then(() => {
         this.setState({isLoading: false});
-        this.props.history.push({pathname: '/Successful'});
+        this.props.history.push({
+          pathname: '/Successful',
+          state:{
+            
+            uniqueId:this.state.uniqueIdentity,
+            
+            fullName:fullName
+          }
+      });
       });
     }
   };

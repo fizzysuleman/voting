@@ -11,18 +11,18 @@ import {
 import Link from 'react-router-dom/Link';
 
 class LandingPage extends Component {
-  handleAdmin = () => {
-    this.props.history.push({pathname: '/admin'});
-  };
-  handleAspirants = () => {
-    this.props.history.push({pathname: '/registerAspirants'});
-  };
-  handleVoters = () => {
-    this.props.history.push({pathname: '/Register'});
-  };
-  handleVoting = () => {
-    this.props.history.push({pathname: '/election'});
-  };
+  // handleAdmin = () => {
+  //   this.props.history.push({pathname: '/admin'});
+  // };
+  // handleAspirants = () => {
+  //   this.props.history.push({pathname: '/registerAspirants'});
+  // };
+  // handleVoters = () => {
+  //   this.props.history.push({pathname: '/Register'});
+  // };
+  // handleVoting = () => {
+  //   this.props.history.push({pathname: '/election'});
+  // };
 
   render() {
     return (

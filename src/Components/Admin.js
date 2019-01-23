@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Tab} from 'semantic-ui-react';
 
 import AddPost from './AddPost';
-
+import Disapproved from './Disapproved'
 import RemovePosts from './RemovePosts';
 import Applicants from './Applicants';
 import Voters from './Voters';
@@ -14,6 +14,7 @@ const panes = [
   {menuItem: 'Add Posts', render: () => <AddPost />},
   {menuItem: 'Remove Posts', render: () => <RemovePosts />},
   {menuItem: 'Applicants', render: () => <Applicants />},
+  {menuItem: 'Disapproved Applicants', render: () => <Disapproved />},
   {menuItem: 'Voters', render: () => <Voters />},
   {menuItem: 'Results', render: () => <Result />},
   {menuItem: 'Add ID', render: () => <Id />},

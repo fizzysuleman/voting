@@ -70,7 +70,7 @@ class AdminLogin extends Component {
       this.state.username !== '' &&
       this.state.password !== ''
     ) {
-      localStorage.setItem('USERNAME', this.state.username);
+      sessionStorage.setItem('USERNAME', this.state.username);
       this.props.history.push({pathname: '/admin'});
 
       this.setState({isLoading: false});
@@ -87,7 +87,7 @@ class AdminLogin extends Component {
     const {username, password, isLoading} = this.state;
     return (
       <div>
-        <h1>Login into Admin</h1>
+        <h1>Admin Login</h1>
         {this.state.alert && (
           <div
             className={`alert alert-${this.state.alertData.type}`}

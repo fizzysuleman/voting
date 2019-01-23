@@ -13,7 +13,7 @@ import ElectionLayout from './ElectionLayout';
 // import {history} from 'react-router-dom';
 
 const AuthenticatedComponent = (props) => {
-  let adminKey = localStorage.getItem('USERNAME');
+  let adminKey = sessionStorage.getItem('USERNAME');
   let voterKey = localStorage.getItem('VOTERID');
   
   if (adminKey){

@@ -4,6 +4,7 @@ import {Button, Form, Input, Radio, Select, TextArea} from 'semantic-ui-react';
 import firebaseConf from './Firebase';
 import {Offline} from 'react-detect-offline';
 import {withRouter} from 'react-router-dom';
+import { database } from 'firebase';
 
 class FormExampleFieldControl extends Component {
   constructor() {
@@ -22,6 +23,7 @@ class FormExampleFieldControl extends Component {
       alert: false,
       alertData: {},
       fetchedSchoolId: [],
+      disapprovedId:[],
       aspirant:[],
       postsData:[],
       options: [
@@ -90,11 +92,15 @@ class FormExampleFieldControl extends Component {
     let filteredSchoolId = this.state.fetchedSchoolId.find(id => {
       return this.state.schoolId === id.schoolId;
     });
+    let disapprovedSchoolId=this.state.disapprovedId.find(id=>{
+      return this.state.schoolId===id.disapprovedSchoolId
+    })
+    
     // checking for used school id
     let usedSchoolId=this.state.aspirant.find(id=>{
       return this.state.schoolId===id.schoolId
     })
-    console.log(usedSchoolId)
+    
 
     const itemsRef = firebaseConf
       .database()
@@ -106,7 +112,7 @@ class FormExampleFieldControl extends Component {
         'The school Id was not registered with this school, Contact administrator for future explanation'
       );
       //else if the id typed has been used by another  aspirant
-    } else if(usedSchoolId) {
+    } else if(usedSchoolId || disapprovedSchoolId) {
       this.showAlert(
         'danger',
         'The school Id was registered by another user, Contact administrator if it was not you'
@@ -172,6 +178,20 @@ class FormExampleFieldControl extends Component {
           this.setState({options: options});
         });
       });
+      firebaseConf
+      .database()
+      .ref('disapprovedAspirants')
+      
+      .on('value', snapshot => {
+        const disapprovedId = [];
+        snapshot.forEach(data => {
+          disapprovedId.push({
+            disapprovedSchoolId:data.val().schoolId
+          });
+          this.setState({disapprovedId})
+          });
+         
+        })
     // fetching the schoolId
     firebaseConf
       .database()

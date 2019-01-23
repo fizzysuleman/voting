@@ -11,7 +11,7 @@ class Logout extends Component {
     this.setState({isLoading: true});
     this.props.history.push({pathname: '/LoginAdmin'});
     this.setState({isLoading: false});
-    localStorage.removeItem('USERNAME')
+    sessionStorage.removeItem('USERNAME')
   };
   handleOpenDisapprovedModal = () => {
     this.setState({openDisapprovedModal: true});

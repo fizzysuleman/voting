@@ -6,7 +6,8 @@ import Card from './Components/Card';
 import {Route, BrowserRouter} from 'react-router-dom';
 import Result from './Components/Result';
 import RegisterAspirants from './Components/RegisterAspirants';
-
+import SuccessfulApplicant from './Components/SuccessfulApplicant';
+import Successful from './Components/Successful';
 import './App.css';
 import LoginAdmin from './Components/LoginAdmin';
 import AuthenticatedComponent from './Components/AuthenticatedComponent';
@@ -19,12 +20,9 @@ export default class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route
-            
-            path="/registeraspirants"
-            component={RegisterAspirants}
-          />
-
+          <Route path="/registeraspirants" component={RegisterAspirants} />
+          <Route path="/Successful" component={Successful} />
+          <Route path="/Successful1" component={SuccessfulApplicant} />
           <Route path="/Card" component={Card} />
           <Route path="/Login" component={Login} />
           <Route path="/LoginAdmin" component={LoginAdmin} />

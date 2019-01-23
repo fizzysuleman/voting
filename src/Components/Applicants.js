@@ -1,7 +1,18 @@
 import React, {Component} from 'react';
-import {Table, Header, Image, Button, Icon, Modal} from 'semantic-ui-react';
+import {
+  Table,
+  Header,
+  Image,
+  Button,
+  Icon,
+  Modal,
+  Form,
+  TextArea,
+  Popup
+} from 'semantic-ui-react';
 import {withRouter} from 'react-router-dom';
 import firebaseConf from './Firebase';
+import Segment from 'semantic-ui-react/dist/commonjs/elements/Segment/Segment';
 
 class TableExampleSelectableInvertedRow extends Component {
   constructor(props) {
@@ -10,30 +21,93 @@ class TableExampleSelectableInvertedRow extends Component {
       postsData: [],
       isLoading: false,
       openDisapprovedModal: false,
-      aKey:'',
+      aKey: '',
       userId: '',
-      
+      firstName: '',
+      lastName: '',
+      prefectName: '',
+      reasonDisapproval: '',
+      section: '',
+      schoolId: '',
+      reson: '',
+      todo: '',
+      imageUrl: '',
       basic: true,
       buttonContent: 'Approved',
       aspirant: [],
+      modalOpen: false,
     };
   }
+  handleChange = e => {
+    this.setState({[e.target.name]: e.target.value});
+  };
 
-  openDisapprove = (id,aspirantKey, fullName) => {
-    this.setState({userId: id});
-    this.setState({aKey: aspirantKey});
-    this.setState({fullName});
+  openProfile = (id,aspirantKey,lastName,firstName,prefectName,section,schoolId,reason,todo,imageUrl) => {
+    this.setState({ userId: id,aKey: aspirantKey,lastName,firstName,prefectName,section,schoolId,reason,todo,imageUrl,})
+    this.handleOpen()
+  };
+  handleOpen = () => this.setState({modalOpen: true});
+
+  handleClose = () => this.setState({modalOpen: false});
+
+  openDisapprove = (id,aspirantKey,lastName,firstName,prefectName,section,schoolId,reason,todo,imageUrl ) => {
+    this.setState({
+      userId: id,
+      aKey: aspirantKey,
+      lastName,
+      firstName,
+      prefectName,
+      section,
+      schoolId,
+      reason,
+      todo,
+      imageUrl,
+    });
+
     this.handleOpenDisapprovedModal();
   };
 
-  removeItem = (userId,aKey) => {
+  removeItem = (
+    userId,
+    aKey,
+    lastName,
+    firstName,
+    prefectName,
+    section,
+    schoolId,
+    reason,
+    todo,
+    imageUrl
+  ) => {
     this.setState({isLoading: true});
-    console.log(aKey)
-    const itemRef = firebaseConf.database().ref(`/posts/${userId}/aspirants/${aKey}`);
-    itemRef.remove().then(() => {
-      this.setState({isLoading: false});
-      this.handleCloseDisapprovedModal();
-    });
+    console.log(aKey);
+    const disapproveRef = firebaseConf.database().ref(`disapprovedAspirants`);
+
+    disapproveRef
+      .child(`${aKey}`)
+      .set({
+        firstName: firstName,
+        lastName: lastName,
+        prefectName: prefectName,
+        prefectId: userId,
+        reason: reason,
+        section: section,
+        todo: todo,
+        imageUrl: imageUrl,
+        schoolId: schoolId,
+        reasonDisapproval: this.state.reasonDisapproval,
+      })
+
+      .then(() => {
+        const itemRef = firebaseConf
+          .database()
+          .ref(`/posts/${userId}/aspirants/${aKey}`);
+        itemRef.remove().then(() => {
+          this.setState({isLoading: false});
+          this.handleCloseDisapprovedModal();
+          this.setState({reasonDisapproval: ''});
+        });
+      });
   };
 
   handleOpenDisapprovedModal = () => {
@@ -43,11 +117,31 @@ class TableExampleSelectableInvertedRow extends Component {
   handleCloseDisapprovedModal = () => {
     this.setState({openDisapprovedModal: false});
   };
-  
-  changePost = (post,lastName,firstName, id,aspirantKey,section,reason,todo,imageUrl) => {
+
+  changePost = (
+    post,
+    lastName,
+    firstName,
+    id,
+    aspirantKey,
+    section,
+    reason,
+    todo,
+    imageUrl
+  ) => {
     this.props.history.push({
       pathname: '/change',
-      state: {post,lastName, firstName, id,aspirantKey,section,reason,todo,imageUrl},
+      state: {
+        post,
+        lastName,
+        firstName,
+        id,
+        aspirantKey,
+        section,
+        reason,
+        todo,
+        imageUrl,
+      },
     });
   };
 
@@ -68,30 +162,46 @@ class TableExampleSelectableInvertedRow extends Component {
               data.val().aspirants ? data.val().aspirants : []
             ).map(e => Object.assign(e[1], {aspirantKey: e[0]})),
           });
-          });
-
-          this.setState({postsData: postsData});
-          //trying to get the items in the in aspirants 
-          let newData = postsData.filter(item => {
-            return item.aspirants.length > 0;
-          });
-
-          let finalData = newData.map(item => {
-            return item.aspirants;
-          });
-          //joining all the arrays together
-          let finalFinalData = finalData.reduce((a, b) => {
-            return a.concat(b);
-          }, []);
-
-          this.setState({aspirant: finalFinalData});
-          console.log(this.state.aspirant);
         });
-      };
-  
+
+        this.setState({postsData: postsData});
+        //trying to get the items in the in aspirants
+        let newData = postsData.filter(item => {
+          return item.aspirants.length > 0;
+        });
+
+        let finalData = newData.map(item => {
+          return item.aspirants;
+        });
+        //joining all the arrays together
+        let finalFinalData = finalData.reduce((a, b) => {
+          return a.concat(b);
+        }, []);
+
+        this.setState({aspirant: finalFinalData});
+        console.log(this.state.aspirant);
+      });
+  };
 
   render() {
-    const {postsData, isLoading, openDisapprovedModal, aspirant} = this.state;
+    const {
+      postsData,
+      isLoading,
+      openDisapprovedModal,
+      reasonDisapproval,
+      aspirant,
+      userId,
+      aKey,
+      firstName,
+      lastName,
+      schoolId,
+      section,
+      reason,
+      imageUrl,
+      prefectId,
+      prefectName,
+      todo,
+    } = this.state;
     return (
       <div>
         <Table celled inverted selectable>
@@ -116,12 +226,29 @@ class TableExampleSelectableInvertedRow extends Component {
                 <Table.Cell>
                   <Header as="h4">
                     <Image
-                      src={item.imageUrl.downloadURL ? item.imageUrl : ''}
+                      src={item.imageUrl ? item.imageUrl.downloadURL:''}
                       rounded
                       size="mini"
                     />
-                    <Header.Content style={{color: 'white'}}>
-                      {item.lastName+' '+item.firstName}
+                    <Header.Content
+                      style={{color: 'white',}}
+
+                      onClick={() =>
+                        this.openProfile(
+                          item.prefectId,
+                          item.aspirantKey,
+                          item.lastName,
+                          item.firstName,
+                          item.prefectName,
+                          item.section,
+                          item.schoolId,
+                          item.reason,
+                          item.todo,
+                          item.imageUrl
+                        )
+                      }
+                    >
+                      {item.lastName + ' ' + item.firstName}
                     </Header.Content>
                   </Header>
                 </Table.Cell>
@@ -131,14 +258,22 @@ class TableExampleSelectableInvertedRow extends Component {
                 <Table.Cell>{item.reason}</Table.Cell>
                 <Table.Cell>{item.todo}</Table.Cell>
                 <Table.Cell>
-                  <Button basic={this.state.basic} color="green">
-                    {this.state.buttonContent}
-                  </Button>
                   <Button
                     basic
                     color="red"
                     onClick={() =>
-                      this.openDisapprove(item.prefectId,item.aspirantKey, (item.lastName+' '+item.firstName))
+                      this.openDisapprove(
+                        item.prefectId,
+                        item.aspirantKey,
+                        item.lastName,
+                        item.firstName,
+                        item.prefectName,
+                        item.section,
+                        item.schoolId,
+                        item.reason,
+                        item.todo,
+                        item.imageUrl
+                      )
                     }
                   >
                     Disapprove
@@ -149,8 +284,8 @@ class TableExampleSelectableInvertedRow extends Component {
                     onClick={() =>
                       this.changePost(
                         item.prefectName,
-                        (item.lastName),
-                        (item.firstName),
+                        item.lastName,
+                        item.firstName,
                         item.prefectId,
                         item.aspirantKey,
                         item.section,
@@ -162,6 +297,20 @@ class TableExampleSelectableInvertedRow extends Component {
                   >
                     Change Post
                   </Button>
+                  <Popup trigger={<Button primary icon='eye'onClick={() =>
+                        this.openProfile(
+                          item.prefectId,
+                          item.aspirantKey,
+                          item.lastName,
+                          item.firstName,
+                          item.prefectName,
+                          item.section,
+                          item.schoolId,
+                          item.reason,
+                          item.todo,
+                          item.imageUrl
+                        )
+                      } />} content='View details' />
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -182,7 +331,23 @@ class TableExampleSelectableInvertedRow extends Component {
           >
             <Header icon="user delete" content="Removal Confirmation" />
             <Modal.Content>
-              <p>Are you sure you want to remove {this.state.fullName}</p>
+              <p>
+                Are you sure you want to remove{' '}
+                {this.state.lastName + ' ' + this.state.firstName}
+              </p>
+              <Segment inverted>
+                <Form>
+                  {' '}
+                  <Form.Field
+                    onChange={this.handleChange}
+                    control={TextArea}
+                    label="Reason for disapproval"
+                    placeholder="What is the reason for wanting to the disapprove this aspirant"
+                    name="reasonDisapproval"
+                    value={reasonDisapproval}
+                  />
+                </Form>
+              </Segment>
             </Modal.Content>
             <Modal.Actions>
               <Button
@@ -194,14 +359,59 @@ class TableExampleSelectableInvertedRow extends Component {
                 <Icon name="remove" /> No
               </Button>
               <Button
+                disabled={!reasonDisapproval}
                 color="green"
-                onClick={() => this.removeItem(this.state.userId,this.state.aKey)}
+                onClick={() =>
+                  this.removeItem(
+                    userId,
+                    aKey,
+                    lastName,
+                    firstName,
+                    prefectName,
+                    section,
+                    schoolId ? schoolId : '',
+                    reason,
+                    todo,
+                    imageUrl
+                  )
+                }
                 loading={isLoading}
               >
                 <Icon name="checkmark" /> Yes
               </Button>
             </Modal.Actions>
           </Modal>
+        </div>
+        <div>
+          <Modal
+            open={this.state.modalOpen}
+            onClose={this.handleClose}
+            basic
+            size="small"
+          >
+            <Modal.Header>{this.state.lastName+' '+this.state.firstName}</Modal.Header>
+            <Modal.Content image>
+              <Image
+                wrapped
+                size="medium"
+                src={this.state.imageUrl.downloadURL}
+              />
+              <Modal.Description>
+                <Header style={{color:'white'}}>SchoolID: {this.state.schoolId}</Header>
+                <p>
+                 <b>Reason for applying to become a prefect:</b>{'   '+this.state.reason}
+                </p>
+                <p><b>What would you do if you get there:</b>{'   '+this.state.todo}</p>
+                <p><b>Class:</b> SS2{'   '+this.state.section}</p>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color="green" onClick={this.handleClose} >
+                <Icon name="checkmark" /> Got it
+              </Button>
+            </Modal.Actions>
+          </Modal>
+          )
         </div>
       </div>
     );
