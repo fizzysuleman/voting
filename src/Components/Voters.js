@@ -69,7 +69,7 @@ class VotersTable extends Component {
                 <Table.HeaderCell>Class</Table.HeaderCell>
                 <Table.HeaderCell>Class teacher</Table.HeaderCell>
                 <Table.HeaderCell>Voters id</Table.HeaderCell>
-                <Table.HeaderCell>Remove</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -86,15 +86,7 @@ class VotersTable extends Component {
                   <Table.Cell>{voter.teacher}</Table.Cell>
                   <Table.Cell>{voter.id}</Table.Cell>
                   <Table.Cell>
-                    <Button
-                      basic
-                      color="red"
-                      onClick={() => {
-                        this.openRemove(voter.uid, voter.fullName);
-                      }}
-                    >
-                      Remove
-                    </Button>
+                    Not Voted
                   </Table.Cell>
                 </Table.Row>
               ))}

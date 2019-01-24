@@ -7,6 +7,7 @@ import {
   Button,
   Accordion,
   Form,
+  Label
 } from 'semantic-ui-react';
 import firebaseConf from './Firebase';
 import per from './6.jpg';
@@ -19,10 +20,8 @@ class AccordionExampleStandard extends Component {
       activeIndex: '',
       contestantsPost: [],
       fullName: props.location.state ? props.location.state.correctIdName : '',
-      aspirant:'',
-      selectedAspirant: {},
       haveVoted: [],
-      voterId: '',
+      voterId: ''
     };
   }
 
@@ -42,18 +41,13 @@ class AccordionExampleStandard extends Component {
     const newIndex = activeIndex === index ? -1 : index;
 
     this.setState({activeIndex: newIndex});
-    if (this.state.contestantsPost[index].votes) {
-       this.setState({
-        aspirant: this.state.contestantsPost[index].votes[this.state.voterId],
-      })
-     
-    }
-    
-
-    this.setState({selectedAspirant: this.state.contestantsPost[index] })
-
-    
   };
+
+  componentDidUpdate(prevProps,prevState){
+   if( prevState.aspirant!==this.state.aspirant){
+    this.setState({aspirant:this.state.aspirant})
+   }
+  }
 
   handleFinish = () => {
     localStorage.removeItem('VOTERID');
@@ -86,7 +80,7 @@ class AccordionExampleStandard extends Component {
   };
 
   handleVote = (prefectId, aspirantKey, postIndex, aspirantIndex) => () => {
-    const {voterId, aspirant,contestantsPost} = this.state;
+    const {voterId} = this.state;
     const itemsRef = firebaseConf
       .database()
       .ref(`posts/${prefectId}/aspirants/${aspirantKey}/votes`);
@@ -106,17 +100,8 @@ class AccordionExampleStandard extends Component {
         this.showAlert('danger', message);
       });
     this.setState({isLoading: false});
-    if (this.state.contestantsPost[postIndex].votes) {
-    this.setState({
-      aspirant: this.state.contestantsPost[postIndex].votes[this.state.voterId].voterId,
-    })
-  }
-  let remainingContestant=contestantsPost.filter((contestant,index)=>{
-    return(contestant[index]!==postIndex)
-  })
-  this.setState({
-    aspirant:remainingContestant
-  })
+   
+
   };
 
   fetchAspirantsdata = () => {
@@ -138,12 +123,25 @@ class AccordionExampleStandard extends Component {
           this.setState({contestantsPost});
           console.log(this.state.contestantsPost);
         });
+         //trying to get the items in the in aspirants 
+         let newData = contestantsPost.filter(item => {
+          return item.aspirants;
+        });
+
+        let finalData = newData.map(item => {
+          return item.aspirants;
+        });
+        //joining all the arrays together
+        let finalFinalData = finalData.reduce((a, b) => {
+          return a.concat(b);
+        }, []);
+
+        this.setState({newAspirant: finalData});
       });
   };
 
   render() {
      console.log(this.state.aspirant)
-    console.log(this.state.selectedAspirant)
     const {activeIndex, contestantsPost, voterId} = this.state;
 
     return (
@@ -161,7 +159,7 @@ class AccordionExampleStandard extends Component {
                     key={posts.key}
                   >
                     <Icon name="dropdown" />
-                    {posts.post}
+                    {(posts.votes && posts.votes[voterId])? <Label color='blue' content={posts.post} />: posts.post}
                   </Accordion.Title>
                   <Accordion.Content active={activeIndex === index}>
                     <Card.Group centered stretched>
@@ -189,7 +187,7 @@ class AccordionExampleStandard extends Component {
                                     index,
                                     i
                                   )}
-                                  disabled={this.state.aspirant===voterId}
+                                  disabled={(posts.votes && posts.votes[voterId])}
                                 >
                                   Vote
                                 </Button>
