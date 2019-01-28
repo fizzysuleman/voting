@@ -60,7 +60,6 @@ class AdminLogin extends Component {
         data.password === this.state.password
       );
     });
-    console.log(correctUser);
     const finalUsername = correctUser ? correctUser.username : '';
     const finalPassword = correctUser ? correctUser.password : '';
     // console.log(this.state.id);

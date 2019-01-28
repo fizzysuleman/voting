@@ -14,13 +14,13 @@ import ElectionLayout from './ElectionLayout';
 
 const AuthenticatedComponent = (props) => {
   let adminKey = sessionStorage.getItem('USERNAME');
-  let voterKey = localStorage.getItem('VOTERID');
+  let voterKey = sessionStorage.getItem('VOTERID');
   
   if (adminKey){
     return adminKey ? (
       <AppLayout />
     ) : (
-      <Redirect to={{pathname: '/LoginAdmin', state: {from: props.location}}} />
+      <Redirect to={{pathname: '/login-admin', state: {from: props.location}}} />
     );
   }
   
@@ -28,7 +28,7 @@ const AuthenticatedComponent = (props) => {
     return voterKey ? (
       <ElectionLayout/>
     ) : (
-      <Redirect to={{pathname: '/Login', state: {from: props.location}}} />
+      <Redirect to={{pathname: '/login', state: {from: props.location}}} />
     );
   }
 

@@ -49,7 +49,6 @@ class AddPost extends Component {
       id: uniqueID(),
     };
 
-    console.log(posts);
 
     postsRef
       .push(posts)

@@ -11,18 +11,7 @@ import {
 import Link from 'react-router-dom/Link';
 
 class LandingPage extends Component {
-  // handleAdmin = () => {
-  //   this.props.history.push({pathname: '/admin'});
-  // };
-  // handleAspirants = () => {
-  //   this.props.history.push({pathname: '/registerAspirants'});
-  // };
-  // handleVoters = () => {
-  //   this.props.history.push({pathname: '/Register'});
-  // };
-  // handleVoting = () => {
-  //   this.props.history.push({pathname: '/election'});
-  // };
+ 
 
   render() {
     return (
@@ -42,7 +31,7 @@ class LandingPage extends Component {
                   <Icon name="user circle" />
                   Admin access only
                 </Header>
-                <Button color="red" as={Link} to='/LoginAdmin'>
+                <Button color="red" as={Link} to='/login-admin'>
                   Admin
                 </Button>
               </Grid.Column>
@@ -52,7 +41,7 @@ class LandingPage extends Component {
                   <Icon name="registered" />
                   Register to contest
                 </Header>
-                <Button color="yellow" as={Link} to='/registerAspirants'>
+                <Button color="yellow" as={Link} to='/register-aspirants'>
                   Register Aspirants
                 </Button>
               </Grid.Column>
@@ -62,7 +51,7 @@ class LandingPage extends Component {
                   <Icon name="users" />
                   Register to Vote
                 </Header>
-                <Button color="blue" as={Link} to='/Register'>
+                <Button color="blue" as={Link} to='/register'>
                   Register Voters
                 </Button>
               </Grid.Column>
@@ -72,7 +61,7 @@ class LandingPage extends Component {
                   <Icon name="erase" />
                   Vote for candidate
                 </Header>
-                <Button color="green" as={Link} to='/Login'>
+                <Button color="green" as={Link} to='/login'>
                   Election
                 </Button>
               </Grid.Column>

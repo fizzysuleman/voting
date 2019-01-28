@@ -49,6 +49,7 @@ class VotersTable extends Component {
             teacher: data.val().teacher,
             class: data.val().category + ' ' + data.val().section,
             id: data.val().id,
+            status:data.val().status
           };
 
           votersData.push(votersNew);
@@ -86,7 +87,7 @@ class VotersTable extends Component {
                   <Table.Cell>{voter.teacher}</Table.Cell>
                   <Table.Cell>{voter.id}</Table.Cell>
                   <Table.Cell>
-                    Not Voted
+                    {voter.status}
                   </Table.Cell>
                 </Table.Row>
               ))}

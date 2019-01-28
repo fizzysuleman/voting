@@ -7,10 +7,11 @@ import {
   Button,
   Accordion,
   Form,
-  Label
+  Label,
+  Modal,
+  Header
 } from 'semantic-ui-react';
 import firebaseConf from './Firebase';
-import per from './6.jpg';
 import {withRouter} from 'react-router-dom';
 
 class AccordionExampleStandard extends Component {
@@ -20,8 +21,11 @@ class AccordionExampleStandard extends Component {
       activeIndex: '',
       contestantsPost: [],
       fullName: props.location.state ? props.location.state.correctIdName : '',
+      uid:props.location.state ? props.location.state.uid : '',
       haveVoted: [],
-      voterId: ''
+      voterId: '',
+      openModal: false,
+      isLoading:false
     };
   }
 
@@ -35,6 +39,14 @@ class AccordionExampleStandard extends Component {
     }, 4000);
   }
 
+  handleOpenModal = () => {
+    this.setState({openModal: true});
+  };
+
+  handleCloseModal = () => {
+    this.setState({openModal: false});
+  };
+
   handleClick = (e, titleProps) => {
     const {index} = titleProps;
     const {activeIndex} = this.state;
@@ -43,22 +55,24 @@ class AccordionExampleStandard extends Component {
     this.setState({activeIndex: newIndex});
   };
 
-  componentDidUpdate(prevProps,prevState){
-   if( prevState.aspirant!==this.state.aspirant){
-    this.setState({aspirant:this.state.aspirant})
-   }
-  }
+  
 
   handleFinish = () => {
-    localStorage.removeItem('VOTERID');
+    sessionStorage.removeItem('VOTERID');
     this.props.history.push({
-      pathname: '/Login',
+      pathname: '/login',
     });
+    firebaseConf
+      .database()
+      .ref(`/voters/${this.state.uid}`)
+      .update({
+        status:'Has Voted'
+      });
   };
   componentDidMount() {
     this.fetchAspirantsdata();
 
-    let voterId = localStorage.getItem('VOTERID');
+    let voterId = sessionStorage.getItem('VOTERID');
     this.setState({voterId});
   }
 
@@ -74,9 +88,7 @@ class AccordionExampleStandard extends Component {
       .database()
       .ref(`posts/${prefectId}/votes/${voterId}`);
     removeRef2.remove();
-    this.setState({
-      aspirant:''
-    })
+    
   };
 
   handleVote = (prefectId, aspirantKey, postIndex, aspirantIndex) => () => {
@@ -93,13 +105,7 @@ class AccordionExampleStandard extends Component {
       .child(voterId)
       .set({voterId: voterId})
 
-      .then(() => {})
-
-      .catch(message => {
-        console.log(`this is the error :${message}`);
-        this.showAlert('danger', message);
-      });
-    this.setState({isLoading: false});
+     
    
 
   };
@@ -121,27 +127,13 @@ class AccordionExampleStandard extends Component {
             ).map(e => Object.assign(e[1], {aspirantKey: e[0]})),
           });
           this.setState({contestantsPost});
-          console.log(this.state.contestantsPost);
         });
          //trying to get the items in the in aspirants 
-         let newData = contestantsPost.filter(item => {
-          return item.aspirants;
-        });
-
-        let finalData = newData.map(item => {
-          return item.aspirants;
-        });
-        //joining all the arrays together
-        let finalFinalData = finalData.reduce((a, b) => {
-          return a.concat(b);
-        }, []);
-
-        this.setState({newAspirant: finalData});
+         
       });
   };
 
   render() {
-     console.log(this.state.aspirant)
     const {activeIndex, contestantsPost, voterId} = this.state;
 
     return (
@@ -159,7 +151,7 @@ class AccordionExampleStandard extends Component {
                     key={posts.key}
                   >
                     <Icon name="dropdown" />
-                    {(posts.votes && posts.votes[voterId])? <Label color='blue' content={posts.post} />: posts.post}
+                    {(posts.votes && posts.votes[voterId])? <Label color='green' content={posts.post} />: posts.post}
                   </Accordion.Title>
                   <Accordion.Content active={activeIndex === index}>
                     <Card.Group centered stretched>
@@ -216,16 +208,48 @@ class AccordionExampleStandard extends Component {
             })}
           </Accordion>
           <br />
-          <Form.Field
+          <div style={{marginLeft:'50%',marginRight:'50%'}}><Form.Field
             style={{paddingLeft: 'auto', paddingRight: 'auto'}}
             control={Button}
             type="submit"
             color="blue"
-            onClick={this.handleFinish}
+            onClick={this.handleOpenModal}
           >
             Finish
-          </Form.Field>
+          </Form.Field></div>
         </Container>
+        <div> 
+          <Modal
+            open={this.state.openModal}
+            onClose={this.handleCloseModal}
+            basic
+            size="small"
+            style={{minHeight: '100vh'}}
+          >
+            <Header icon="user delete" content="Removal Confirmation" />
+            <Modal.Content>
+              <p>Are you sure you want to want to end Voting process</p>
+              <h4>Note:You cant change your mind after submitting</h4>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button
+                basic
+                color="red"
+                inverted
+                onClick={this.handleCloseDisapprovedModal}
+              >
+                <Icon name="remove" /> No
+              </Button>
+              <Button
+                color="green"
+                onClick={() => this.handleFinish()}
+                loading={this.state.isLoading}
+              >
+                <Icon name="checkmark" /> Yes
+              </Button>
+            </Modal.Actions>
+          </Modal>
+        </div>
       </div>
     );
   }

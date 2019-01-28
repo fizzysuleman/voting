@@ -15,19 +15,18 @@ class ChangePost extends Component {
       ],
       selectedOption: '',
       post: props.location.state ? props.location.state.post : '',
-      firstName: props.location.state.firstName,
-      lastName: props.location.state.lastName,
-      id: props.location.state.id,
-      aspirantKey: props.location.state.aspirantKey,
-      section: props.location.state.section,
-      reason: props.location.state.reason,
-      todo: props.location.state.todo,
+      firstName: props.location.state ? props.location.state.firstName:'',
+      lastName: props.location.state? props.location.state.lastName:'',
+      id:props.location.state? props.location.state.id:'',
+      aspirantKey:props.location.state? props.location.state.aspirantKey:'',
+      section: props.location.state? props.location.state.section:'',
+      reason: props.location.state? props.location.state.reason:'',
+      todo: props.location.state? props.location.state.todo:'',
       imageUrl:{ downloadURL: props.location.state.imageUrl},
       isLoading: false,
       fullName:
-        props.location.state.firstName + ' ' + props.location.state.lastName,
+        (props.location.state.firstName + ' ' + props.location.state.lastName)?props.location.state.firstName + ' ' + props.location.state.lastName:'',
     };
-    console.log(props.location.state)
     //post: props.location.state ? props.location.state.post : ""
   }
   
@@ -47,7 +46,6 @@ class ChangePost extends Component {
       return option.key === this.state.selectedOption;
     });
     let prefectId = prefect.key;
-    console.log(prefectId);
     const aspirantPush = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,

@@ -32,7 +32,7 @@ class AddId extends Component {
   componentDidMount() {
     firebaseConf
       .database()
-      .ref('schoolInfo')
+      .ref('school')
       .on('value', snapshot => {
         const fetchedSchoolId = [];
         snapshot.forEach(data => {
@@ -64,7 +64,7 @@ class AddId extends Component {
       this.setState({isLoading: false})
     } else {
         //else send the data to firebase
-      const idRef = firebaseConf.database().ref(`schoolInfo`);
+      const idRef = firebaseConf.database().ref(`school`);
       let childId = schoolId;
       idRef
       //setting the child name to this.state.schoolId
@@ -77,7 +77,7 @@ class AddId extends Component {
         .then(() => {
           this.showAlert(
             'success',
-            'You have successfully added a person to be able to vote'
+            'You have successfully added a person to be able to register to vote'
           );
           this.setState({isLoading: false, fullName: '', schoolId: ''});
         });

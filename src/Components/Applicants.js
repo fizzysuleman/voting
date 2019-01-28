@@ -80,7 +80,6 @@ class TableExampleSelectableInvertedRow extends Component {
     imageUrl
   ) => {
     this.setState({isLoading: true});
-    console.log(aKey);
     const disapproveRef = firebaseConf.database().ref(`disapprovedAspirants`);
 
     disapproveRef
@@ -179,7 +178,6 @@ class TableExampleSelectableInvertedRow extends Component {
         }, []);
 
         this.setState({aspirant: finalFinalData});
-        console.log(this.state.aspirant);
       });
   };
 
@@ -212,10 +210,10 @@ class TableExampleSelectableInvertedRow extends Component {
               <Table.HeaderCell>Class(SS2)</Table.HeaderCell>
               <Table.HeaderCell>School ID</Table.HeaderCell>
               <Table.HeaderCell>
-                Reason want to become a Prefect
+                Reason for aspiring to become a Prefect
               </Table.HeaderCell>
               <Table.HeaderCell>
-                What would do if put in that post
+                What would do when elected to that post
               </Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>
@@ -342,7 +340,7 @@ class TableExampleSelectableInvertedRow extends Component {
                     onChange={this.handleChange}
                     control={TextArea}
                     label="Reason for disapproval"
-                    placeholder="What is the reason for wanting to the disapprove this aspirant"
+                    placeholder="What is the reason for  disapproving this aspirant"
                     name="reasonDisapproval"
                     value={reasonDisapproval}
                   />

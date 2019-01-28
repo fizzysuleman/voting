@@ -156,10 +156,10 @@ class TableExampleSelectableInvertedRow extends Component {
               <Table.HeaderCell>Class(SS2)</Table.HeaderCell>
               <Table.HeaderCell>School ID</Table.HeaderCell>
               <Table.HeaderCell>
-                Reason want to become a Prefect
+              Reason for aspiring to become a Prefect
               </Table.HeaderCell>
               <Table.HeaderCell>
-                What would do if put in that post
+              What would do when elected to that post
               </Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>

@@ -9,15 +9,17 @@ import Voters from './Voters';
 import Result from './Result';
 import Logout from './Logout';
 import Id from './Id'
+import SchoolId from './SchoolId'
 
 const panes = [
   {menuItem: 'Add Posts', render: () => <AddPost />},
   {menuItem: 'Remove Posts', render: () => <RemovePosts />},
   {menuItem: 'Applicants', render: () => <Applicants />},
   {menuItem: 'Disapproved Applicants', render: () => <Disapproved />},
+  {menuItem: 'Add ID', render: () => <Id />},
+  {menuItem: 'School ID', render: () => <SchoolId />},
   {menuItem: 'Voters', render: () => <Voters />},
   {menuItem: 'Results', render: () => <Result />},
-  {menuItem: 'Add ID', render: () => <Id />},
   {menuItem: 'Logout', render: () => <Logout />},
 ];
 class TabExamplePointing extends Component {
@@ -25,7 +27,7 @@ class TabExamplePointing extends Component {
     return (
       <div>
         <h1>Admin</h1>
-        <Tab menu={{pointing: true, secondary: true}} panes={panes} />
+        <Tab menu={{pointing: true, secondary: true}} panes={panes}  />
       </div>
     );
   }

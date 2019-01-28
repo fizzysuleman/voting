@@ -56,7 +56,6 @@ class FormExampleFieldControl extends Component {
   handleOptionSelect = (e, {name, value}) => {
     this.setState({[name]: value});
   };
-
   setUrl = downloadURL => {
     this.setState({url: downloadURL});
 
@@ -69,7 +68,6 @@ class FormExampleFieldControl extends Component {
     let prefect = this.state.options.find(option => {
       return option.key === this.state.prefectId;
     });
-    console.log(prefect);
     const item = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -111,22 +109,23 @@ class FormExampleFieldControl extends Component {
         'danger',
         'The school Id was not registered with this school, Contact administrator for future explanation'
       );
+      this.setState({isLoading: false});
       //else if the id typed has been used by another  aspirant
     } else if(usedSchoolId || disapprovedSchoolId) {
       this.showAlert(
         'danger',
         'The school Id was registered by another user, Contact administrator if it was not you'
       );
+      this.setState({isLoading: false});
       //if the two conditions do not apply the the information can be pushed to firebase
     }else{
             itemsRef
         .push(item)
         .then(() => {
           this.showAlert('success', 'You have successfully filled the form');
-          this.props.history.push({pathname: '/Successful1'});
+          this.props.history.push({pathname: '/successful-aspirants'});
         })
         .catch(message => {
-          console.log(`this is the error :${message}`);
           this.showAlert('danger', message);
         });
       this.setState({isLoading: false});
@@ -138,12 +137,14 @@ class FormExampleFieldControl extends Component {
     e.preventDefault();
 
     this.setState({isLoading: true});
-
+//fetching the image selected by its ID
     var myFile = document.getElementById('my-file-id').files[0];
+    if (myFile){
     var storageRef = firebaseConf
       .storage()
-      .ref('aspirantImages/' + myFile ? myFile.name : '');
-
+      .ref('aspirantImages/' + myFile ? myFile.name : '')
+    }
+if(myFile){
     storageRef
       .put(myFile)
       .then(snapshot => {
@@ -157,6 +158,10 @@ class FormExampleFieldControl extends Component {
         // Use to signal error if something goes wrong.
         console.log(`error response : ${message}`);
       });
+    }else{
+      const downloadURL=''
+      this.setUrl({downloadURL})
+    }
   };
 
   componentWillMount() {
@@ -195,12 +200,12 @@ class FormExampleFieldControl extends Component {
     // fetching the schoolId
     firebaseConf
       .database()
-      .ref('schoolInfo')
+      .ref('school')
       .on('value', snapshot => {
         const fetchedSchoolId = [];
         snapshot.forEach(data => {
           const fetchedSchoolIdNew = {
-            schoolId: data.key,
+            schoolId: data.val().schoolId,
           };
           fetchedSchoolId.push(fetchedSchoolIdNew);
           this.setState({fetchedSchoolId});
@@ -331,13 +336,13 @@ class FormExampleFieldControl extends Component {
           </Form.Group>
           <Form.Field
             control={TextArea}
-            label="Reason want to become a Prefect"
+            label="Reason for aspiring  to become a Prefect"
             placeholder="Tell us  ..."
             name="reason"
           />
           <Form.Field
             control={TextArea}
-            label="What would you do when you become a prefect"
+            label="What would you contribute to the value of the school you become a prefect"
             placeholder="Tell us  ..."
             name="todo"
           />

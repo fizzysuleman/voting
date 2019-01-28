@@ -42,7 +42,8 @@ class Login extends Component {
           const fuidNew = {
             id: data.val().id,
             uid: data.key,
-            fullName:data.val().fullName
+            fullName:data.val().fullName,
+            status:data.val().status
           };
           fuid.push(fuidNew);
           this.setState({fuid});
@@ -61,18 +62,29 @@ class Login extends Component {
       return this.state.id=== person.id
     })
     let correctIdName=correctPerson?correctPerson.fullName:''
+    let status=correctPerson?correctPerson.status:""
+    let uid=correctPerson?correctPerson.uid:''
     this.setState({correctIdName})
     const finalId = correctId ? correctId.id : '';
-    if (finalId === this.state.id && this.state.id !== '') {
-      localStorage.setItem('VOTERID', finalId);
+    if (finalId === this.state.id && this.state.id !== '' &&(status==='Not voted' ||status==='Voting in process')) {
+      sessionStorage.setItem('VOTERID', finalId);
       this.props.history.push({
         pathname: '/election',
         state:{
-          correctIdName
+          correctIdName,
+          uid
         }
 
       });
+      
       this.setState({isLoading: false});
+      firebaseConf
+      .database()
+      .ref(`/voters/${uid}`)
+      .update({
+        status:'Voting in process'
+      });
+
     } else {
       this.showAlert(
         'danger',

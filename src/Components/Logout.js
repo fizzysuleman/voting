@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import {Form, Button, Modal, Header, Icon} from 'semantic-ui-react';
 import {withRouter} from 'react-router-dom';
+import firebaseConf from './Firebase'
 
 class Logout extends Component {
   constructor() {
     super();
-    this.state = {isLoading: false, openDisapprovedModal: false};
+    this.state = {isLoading: false, openDisapprovedModal: false,electionStatus:''};
   }
   handleSubmit = () => {
     this.setState({isLoading: true});
-    this.props.history.push({pathname: '/LoginAdmin'});
+    this.props.history.push({pathname: '/login-admin'});
     this.setState({isLoading: false});
     sessionStorage.removeItem('USERNAME')
   };
@@ -22,9 +23,28 @@ class Logout extends Component {
   };
   changePassword = () => {
     this.props.history.push({
-      pathname: '/changePassword',
+      pathname: '/change-password',
     });
   };
+  // disableElection=()=>{
+
+  // }
+componentDidMount(){
+  this.fetchElectionButton()
+}
+fetchElectionButton=()=>{
+  firebaseConf.database().ref('election').on('value',snapshot=>{
+    const electionStatus=''
+    snapshot.forEach(data=>{
+      electionStatus.push({
+        electionEnabled:data.val().type
+      })
+    })
+    this.setState(electionStatus)
+    console.log(this.state.electionStatus)
+  })
+}
+
   render() {
     return (
       <div>
@@ -41,8 +61,33 @@ class Logout extends Component {
             control={Button}
             type="submit"
             onClick={() => this.changePassword()}
+            color='red'
           >
-            Change Password
+            Change Admin Password
+          </Form.Field>
+          <Form.Field
+            control={Button}
+            type="submit"
+            // onClick={() => this.changePassword()}
+            color='green'
+          >
+          Disable Election process
+          </Form.Field>
+          <Form.Field
+            control={Button}
+            type="submit"
+            // onClick={() => this.changePassword()}
+            color='yellow'
+          >
+          Disable Registration of aspirants
+          </Form.Field>
+          <Form.Field
+            control={Button}
+            type="submit"
+            // onClick={() => this.changePassword()}
+            
+          >
+          Disable Registration of Voters 
           </Form.Field>
         </Form>
         <div>

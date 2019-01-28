@@ -16,7 +16,7 @@ class AuthenticatedComponent extends Component {
           {/* <Route path="/election" component={Election} /> */}
           <Route exact path="/admin" component={Admin} />
           <Route path="/change" component={ChangePost} />
-          <Route path="/changePassword" component={ChangePassword} />
+          <Route path="/change-password" component={ChangePassword} />
           
         </Switch>
       </div>
