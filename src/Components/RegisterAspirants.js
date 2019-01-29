@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Form, Input, Radio, Select, TextArea} from 'semantic-ui-react';
-
+import * as emailjs from 'emailjs-com'
 import firebaseConf from './Firebase';
 import {Offline} from 'react-detect-offline';
 import {withRouter} from 'react-router-dom';
@@ -122,6 +122,7 @@ class FormExampleFieldControl extends Component {
             itemsRef
         .push(item)
         .then(() => {
+          this.sendAdminFeedback('fizzysuleman@gmail.com',`${this.state.firstName+' '+this.state.lastName}`)
           this.showAlert('success', 'You have successfully filled the form');
           this.props.history.push({pathname: '/successful-aspirants'});
         })
@@ -164,6 +165,27 @@ if(myFile){
     }
   };
 
+  sendAdminFeedback=(adminEmail,aspirantName)=>{
+    var template_params = {
+      "adminEmail": adminEmail,
+      "aspirantName": aspirantName,
+      "link": "https://e-voting-2f5a4.firebaseapp.com/admin"
+   }
+   
+   var service_id = "default_service";
+   var template_id = "adminEmail";
+   var user_id ="user_0BXEej2yQcLmlDlTI6wdg"
+
+   emailjs.init(user_id);
+
+   emailjs.send(service_id, template_id, template_params,user_id)
+   .then(res => {
+    this.setState({ formEmailSent: true })
+  })
+  // Handle errors here however you like, or use a React error boundary
+  .catch(err => console.error('Failed to send feedback. Error: ', err))
+  }
+  
   componentWillMount() {
     //fetching the posts
     firebaseConf

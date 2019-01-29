@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Button, Form, Input, Select} from 'semantic-ui-react';
+import {Button, Form, Input, Select,Popup} from 'semantic-ui-react';
 import firebaseConf from './Firebase';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import {Offline} from 'react-detect-offline';
 
 class ChangePost extends Component {
@@ -157,6 +157,8 @@ class ChangePost extends Component {
             Change
           </Form.Field>
         </Form>
+        <div style={{marginLeft:'50%',marginRight:'50%'}}> <Popup  trigger={<Button primary  as={Link} to='/admin' >Return</Button>} content='Go back to admin'/></div>
+
         <Offline>
           <marquee>
             You are currently offline,Connect to the internet and continue the

@@ -5,7 +5,7 @@ import Election from './Election';
 import {Switch} from 'react-router';
 
 
-class AuthenticatedComponent extends Component {
+class ElectionLayout extends Component {
   render() {
     return (
       <div>
@@ -18,4 +18,4 @@ class AuthenticatedComponent extends Component {
   }
 }
 
-export default AuthenticatedComponent;
+export default ElectionLayout;

@@ -23,7 +23,7 @@ class Successful extends Component{
                 <br/>
                 <center><div style={{fontWeight:'bold'}}>Take Note!!!...The voterID would be needed during voting process</div></center>
                 <br/>
-               <div style={{marginLeft:'50%',marginRight:'50%'}}> <Popup  trigger={<Button primary  as={Link} to='/Register' >Finish!</Button>} content='Go back to Register'/></div>
+               <div style={{marginLeft:'50%',marginRight:'50%'}}> <Popup  trigger={<Button primary  as={Link} to='/register' >Finish!</Button>} content='Go back to Register'/></div>
             </div>
         )
     }

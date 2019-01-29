@@ -137,11 +137,11 @@ class FormExampleFieldControl extends Component {
    }
    
    var service_id = "default_service";
-   var template_id = "template_KmBJEuEZ";
+   var template_id = "voterRegistration";
    var user_id ="user_0BXEej2yQcLmlDlTI6wdg"
    
-  //  emailjs.init(user_id);
-  //  emailjs.send(service_id, template_id, template_params,user_id)
+   emailjs.init(user_id);
+   emailjs.send(service_id, template_id, template_params,user_id)
      .then(res => {
        this.setState({ formEmailSent: true })
      })

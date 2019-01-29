@@ -8,14 +8,17 @@ import AppLayout from './AppLayout';
 import Login from './Login';
 import LandingPage from './LandingPage';
 import ElectionLayout from './ElectionLayout';
+import firebaseConf from './Firebase'
 
 
 // import {history} from 'react-router-dom';
 
+
 const AuthenticatedComponent = (props) => {
   let adminKey = sessionStorage.getItem('USERNAME');
   let voterKey = sessionStorage.getItem('VOTERID');
-  
+ 
+
   if (adminKey){
     return adminKey ? (
       <AppLayout />
