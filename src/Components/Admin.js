@@ -7,7 +7,7 @@ import RemovePosts from './RemovePosts';
 import Applicants from './Applicants';
 import Voters from './Voters';
 import Result from './Result';
-import Logout from './Logout';
+import Settings from './Settings';
 import Id from './Id'
 import SchoolId from './SchoolId'
 
@@ -20,7 +20,7 @@ const panes = [
   {menuItem: 'School ID', render: () => <SchoolId />},
   {menuItem: 'Voters', render: () => <Voters />},
   {menuItem: 'Results', render: () => <Result />},
-  {menuItem: 'Logout', render: () => <Logout />},
+  {menuItem: 'Settings', render: () => <Settings />},
 ];
 class TabExamplePointing extends Component {
   render() {

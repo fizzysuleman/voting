@@ -76,7 +76,7 @@ class AdminLogin extends Component {
     } else {
       this.showAlert(
         'danger',
-        'You entered a wrong admin detail,Check your internet connection and try again.'
+        'You have either entered a wrong admin detail or check your internet connection and try again.'
       );
       this.setState({isLoading: false});
     }

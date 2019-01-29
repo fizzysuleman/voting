@@ -88,7 +88,7 @@ class Login extends Component {
     } else {
       this.showAlert(
         'danger',
-        'You entered a wrong voter Id,Check your internet connection or Contact Admin if checked and not resolved.'
+        'You have either entered a wrong voter Id or check your internet connection'
       );
       this.setState({isLoading: false});
     }

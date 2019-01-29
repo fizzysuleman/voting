@@ -226,7 +226,7 @@ class AccordionExampleStandard extends Component {
             size="small"
             style={{minHeight: '100vh'}}
           >
-            <Header icon="user delete" content="Removal Confirmation" />
+            <Header icon="user delete" content="Submission Confirmation" />
             <Modal.Content>
               <p>Are you sure you want to want to end Voting process</p>
               <h4>Note:You cant change your mind after submitting</h4>
