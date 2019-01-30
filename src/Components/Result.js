@@ -7,12 +7,16 @@ class Result extends Component {
     super();
     this.state = {
       contestantsPost: [],
+      groups:[]
       
     };
   }
 
   componentDidMount() {
     this.fetchAspirantsdata();
+  }
+  componentWillReceiveProps(){
+    this.getVotes()
   }
   fetchAspirantsdata = () => {
     firebaseConf
@@ -30,18 +34,49 @@ class Result extends Component {
             ).map(e => Object.assign(e[1], {aspirantKey: e[0]})),
           });
           this.setState({contestantsPost});
-          
+          this.getVotes()
         });
       });
   };
+
+  getVotes=()=>{
+    var votes=[]
+    var size=[]
+   var sizes=[0]
+   this.state.contestantsPost.map((post)=>{
+      post.aspirants.map((aspirant, i)=>{
+        votes.push(Object.keys(aspirant.votes?aspirant.votes:{}).length)
+        
+      })
+      size.push(post.aspirants.length)
+    })
+    
+    var x=0
+    size.forEach(element => {
+       x=x+element
+       sizes.push(x)
+     });
+
+    var groups = votes.map(function (e, start) {
+        return votes.slice(sizes[start], sizes[start+1])
+    })
+
+    this.setState({groups})
+    console.log(size)
+    console.log(sizes)
+
+
+  }
+
   render() {
     const {contestantsPost} = this.state;
+    console.log(this.state.groups)
     return (
       <div>
         <Container >
         <Card.Group centered>
           
-          {contestantsPost.map(item => {
+          {contestantsPost.map((item,index) => {
             return (
               
               <Card>
@@ -50,10 +85,10 @@ class Result extends Component {
                 <Icon name='user' />
                 {item.post}
               </Message>
-                {item.aspirants.map((item, index) => (
+                {item.aspirants.map((item, i) => (
                   <div>
                     <Segment.Group>
-                      <Segment>{item.lastName + ' ' + item.firstName} <Label color={item.votes?Object.keys(item.votes).length} style={{float:"right"}}>{item.votes?Object.keys(item.votes).length:"0"}</Label></Segment>
+                      <Segment>{item.lastName + ' ' + item.firstName} <Label color={Math.max.apply(null, this.state.groups[index])===(item.votes && Object.keys(item.votes).length)?"green":'blue'} style={{float:"right"}}>{item.votes?Object.keys(item.votes).length:"0"}</Label></Segment>
                     </Segment.Group>
                   </div>
                 ))}

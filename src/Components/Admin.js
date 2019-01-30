@@ -27,7 +27,7 @@ class TabExamplePointing extends Component {
     return (
       <div>
         <h1>Admin</h1>
-        <Tab menu={{pointing: true, secondary: true}} panes={panes}  />
+        <Tab menu={{pointing: true, secondary: true ,className:'wrapped'}} panes={panes}  />
       </div>
     );
   }

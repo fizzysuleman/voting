@@ -185,3 +185,9 @@ h3 {
   margin-top: 10px;
   margin-right: 95%;
 }
+
+.wrapped{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
