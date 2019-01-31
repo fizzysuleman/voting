@@ -101,8 +101,7 @@ fetchElectionButton=()=>{
 
   render() {
     const {electionStatus,registerStatus,registerAspirantStatus}=this.state
-    console.log(electionStatus)
-    console.log(registerStatus)
+    
     return (
       <div>
         <Container centered>

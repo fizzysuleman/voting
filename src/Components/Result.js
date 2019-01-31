@@ -62,15 +62,14 @@ class Result extends Component {
     })
 
     this.setState({groups})
-    console.log(size)
-    console.log(sizes)
+   
 
 
   }
 
   render() {
     const {contestantsPost} = this.state;
-    console.log(this.state.groups)
+    
     return (
       <div>
         <Container >

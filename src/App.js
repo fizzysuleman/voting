@@ -62,7 +62,7 @@ export default class App extends Component {
             
           }
   render() {
-    console.log(this.state.electionStatus)
+   
     return (
       <BrowserRouter>
         <Switch>

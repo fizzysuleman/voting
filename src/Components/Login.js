@@ -66,7 +66,7 @@ class Login extends Component {
     let uid=correctPerson?correctPerson.uid:''
     this.setState({correctIdName})
     const finalId = correctId ? correctId.id : '';
-    if (finalId === this.state.id && this.state.id !== '' &&(status==='Not voted' ||status==='Voting in process')) {
+    if (finalId === this.state.id && this.state.id !== '' &&(status==='Not voted' ||status==='Voting in progress')) {
       sessionStorage.setItem('VOTERID', finalId);
       this.props.history.push({
         pathname: '/election',
@@ -82,10 +82,17 @@ class Login extends Component {
       .database()
       .ref(`/voters/${uid}`)
       .update({
-        status:'Voting in process'
+        status:'Voting in progress'
       });
 
-    } else {
+    }else if (status==='Has Voted'){
+      this.showAlert(
+        'danger',
+        'The Voter ID you entered has already been used to vote.'
+      );
+      this.setState({isLoading: false});
+    }
+     else {
       this.showAlert(
         'danger',
         'You have either entered a wrong voter Id or check your internet connection'

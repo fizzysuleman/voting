@@ -157,7 +157,7 @@ if(myFile){
       })
       .catch(message => {
         // Use to signal error if something goes wrong.
-        console.log(`error response : ${message}`);
+        // console.log(`error response : ${message}`);
       });
     }else{
       const downloadURL=''

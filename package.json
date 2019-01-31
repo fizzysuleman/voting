@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "canvasjs": "^1.8.1",
-    "firebase": "^5.5.9",
+    "emailjs": "^2.2.0",
+    "emailjs-com": "^2.3.2",
+    "firebase": "^5.8.1",
     "firebase-admin": "^6.3.0",
     "fs": "0.0.1-security",
     "material-ui": "^0.20.2",
